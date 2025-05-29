@@ -22,7 +22,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: AKIAV4UEWA5QDLIN3A4A
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-secret-access-key: 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
           aws-region: us-east-1
 
       - name: Set up kubectl
