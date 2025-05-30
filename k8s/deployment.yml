@@ -1,29 +1,21 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: flask-app
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app-deployment
-  namespace: flask-app
+  name: simple-microservice-deployment
   labels:
-    app: flask-app
+    app: simple-microservice
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: flask-app
+      app: simple-microservice
   template:
     metadata:
       labels:
-        app: flask-app
+        app: simple-microservice
     spec:
       containers:
-        - name: flask-app
+        - name: simple-microservice
           image: saurabhdocker13/flask-iptime:latest
           ports:
             - containerPort: 5000
