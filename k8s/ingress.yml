@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: flask-app-ingress
+  name: simple-microservice-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
@@ -16,6 +16,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: flask-app
+                name: simple-microservice-service
                 port:
                   number: 80
