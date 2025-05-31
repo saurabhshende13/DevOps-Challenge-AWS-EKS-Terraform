@@ -6,6 +6,8 @@ WORKDIR /app
 # Copy files
 COPY app.py requirements.txt ./
 
+pip install flask-cors
+
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
