@@ -9,8 +9,6 @@ COPY app.py requirements.txt ./
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install gunicorn
-
 # Expose the application port
 EXPOSE 80
 
