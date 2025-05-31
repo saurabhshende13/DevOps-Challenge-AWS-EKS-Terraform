@@ -1,18 +1,49 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
-from flask_cors import CORS  # <-- ADD THIS
+import psutil
+import time
 
 app = Flask(__name__)
-CORS(app)  # <-- ENABLE CORS
+
+def get_uptime():
+    boot_time = psutil.boot_time()
+    uptime_seconds = time.time() - boot_time
+    uptime_struct = time.gmtime(uptime_seconds)
+    # Format uptime as: "X days, HH:MM:SS"
+    days = uptime_struct.tm_yday - 1
+    uptime_str = f"{days} days, {uptime_struct.tm_hour:02d}:{uptime_struct.tm_min:02d}:{uptime_struct.tm_sec:02d}"
+    return uptime_str
 
 @app.route("/", methods=["GET"])
-def get_time():
+def system_info():
     current_time = datetime.utcnow().isoformat() + "Z"
     visitor_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    return jsonify({
+
+    cpu_percent = psutil.cpu_percent(interval=1)
+    mem = psutil.virtual_memory()
+    disk = psutil.disk_usage('/')
+
+    data = {
         "timestamp": current_time,
-        "ip": visitor_ip
-    })
+        "visitor_ip": visitor_ip,
+        "system_metrics": {
+            "uptime": get_uptime(),
+            "cpu_percent": f"{cpu_percent}%",
+            "memory": {
+                "total": f"{mem.total // (1024**2)} MB",
+                "available": f"{mem.available // (1024**2)} MB",
+                "used": f"{mem.used // (1024**2)} MB",
+                "percent": f"{mem.percent}%",
+            },
+            "disk": {
+                "total": f"{disk.total // (1024**3)} GB",
+                "used": f"{disk.used // (1024**3)} GB",
+                "free": f"{disk.free // (1024**3)} GB",
+                "percent": f"{disk.percent}%",
+            },
+        }
+    }
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
