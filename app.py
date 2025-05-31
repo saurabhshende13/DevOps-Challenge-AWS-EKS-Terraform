@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+from flask_cors import CORS  # <-- ADD THIS
 
 app = Flask(__name__)
+CORS(app)  # <-- ENABLE CORS
 
 @app.route("/", methods=["GET"])
 def get_time():
